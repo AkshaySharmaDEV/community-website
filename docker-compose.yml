@@ -2,21 +2,38 @@ version: '3.7'
 
 services:
         api:
-                build: ./api
-                command: python manage.py runserver 0.0.0.0:8000
-                volumes:
-                        - ./api/:/app/api
-                ports:
-                        - 8000:8000
-                env_file:
-                        - ./.env.dev
+            build: ./api
+            command: python manage.py runserver 0.0.0.0:8000
+            volumes:
+                    - ./api/:/app/api
+            ports:
+                    - 8000:8000
+            env_file:
+                    - ./.env.dev
         db:
-                image: postgres:12.0-alpine
-                volumes:
-                        - postgres_data:/var/lib/postgresql/data/
-                environment:
-                        - POSTGRES_USER=community_site
-                        - POSTGRES_PASSWORD=community_site
-                        - POSTGRES_DB=community_site_dev
+            image: postgres:12.0-alpine
+            volumes:
+                    - postgres_data:/var/lib/postgresql/data/
+            environment:
+                    - POSTGRES_USER=community_site
+                    - POSTGRES_PASSWORD=community_site
+                    - POSTGRES_DB=community_site_dev
+
+        website:
+            build: ./website/
+            command: >
+                sh -c "npm install &&
+                        npm start"
+            ports:
+                - "3000:3000"
+            volumes:
+                - ./website:/app/website
+            environment:
+                - NODE_ENV=development
+                - "PUBLIC_URL=${EDA_PUBLIC_URL}"
+            stdin_open: true
+            depends_on:
+                - api
+                - db
 volumes:
-        postgres_data:
+    postgres_data:
