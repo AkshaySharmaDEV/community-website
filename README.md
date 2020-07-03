@@ -19,6 +19,8 @@ dsc community website
 ### To create a superuser in db
 1.  ```docker-compose exec api sh -c "python manage.py createsuperuser"```
 
+# Seeding db with fake data
+1. docker-compose exec api python manage.py seed <django_app_name>   
 
 # React app
 1. go to  ```localhost:3000```
