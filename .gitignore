@@ -160,3 +160,6 @@ dmypy.json
 
 # dev database
 api/devdb
+
+media/
+.vscode/
